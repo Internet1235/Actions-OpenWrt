@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 rm -rf feeds/luci/themes/luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/downloads/luci-theme-argon
-
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
 git clone https://github.com/riverscn/openwrt-iptvhelper.git package/iptvhelper
 git clone https://github.com/sirpdboy/luci-app-advanced.git package/luci-app-advanced
 
