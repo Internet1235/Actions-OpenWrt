@@ -13,6 +13,17 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/dow
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
 git clone https://github.com/riverscn/openwrt-iptvhelper.git package/iptvhelper
 git clone https://github.com/sirpdboy/luci-app-advanced.git package/luci-app-advanced
+echo " set ra0 up
+ip link set rai0 up
+
+# 桥接网卡
+brctl addif br-lan ra0
+brctl addif br-lan rai0
+
+
+exit 0
+
+" > package/base-files/etc/rc.local
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
