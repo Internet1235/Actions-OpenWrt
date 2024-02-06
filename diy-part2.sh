@@ -23,7 +23,7 @@ brctl addif br-lan rai0
 
 exit 0
 
-" > package/base-files/etc/files/rc.local
+" > package/base-files/files/etc/rc.local
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
