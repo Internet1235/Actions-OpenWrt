@@ -23,7 +23,6 @@ brctl addif br-lan rai0
 
 exit 0
 
-
 " > package/base-files/files/etc/rc.local
 
 # Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
