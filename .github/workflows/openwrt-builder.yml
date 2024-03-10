@@ -26,6 +26,7 @@ env:
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
+  UPLOAD_IPK: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -111,9 +112,9 @@ jobs:
 
     - name: Generate ipk tag
       id: tag
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      if: env.UPLOAD_IPK == 'true' && !cancelled()
       run: |
-        echo "release_tag_ipk=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
+        echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
         [ ${UPLOAD_GOFILE} = true && ${{ steps.gofile.outputs.url }} ] && echo "🔗 [GoFile](${{ steps.gofile.outputs.url }})" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
@@ -124,7 +125,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ipk ${{ steps.tag.outputs.release_tag_ipk }}
+        tag_name: ipk ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: openwrt/bin/packages/mipsel_24kc/luci/*
 
