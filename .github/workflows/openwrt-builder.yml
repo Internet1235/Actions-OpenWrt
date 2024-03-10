@@ -145,7 +145,7 @@ jobs:
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release tag
-      id: tag
+      id: tag1
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
