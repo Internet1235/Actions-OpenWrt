@@ -125,6 +125,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        name: ipk ${{ steps.tag.outputs.release_tag }}
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: openwrt/bin/packages/mipsel_24kc/luci/*
