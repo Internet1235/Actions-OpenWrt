@@ -8,6 +8,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/dow
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
 git clone https://github.com/Internet1235/openwrt-iptvhelper.git package/iptvhelper
 git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
 git clone https://github.com/sirpdboy/luci-app-advanced.git package/luci-app-advanced
 echo "# Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
