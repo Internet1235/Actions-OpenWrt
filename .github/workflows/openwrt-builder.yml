@@ -112,7 +112,7 @@ jobs:
 
     - name: Generate ipk tag
       id: tag
-      if: env.UPLOAD_IPK == 'true' && steps.tag1.outputs.status == 'success' && !cancelled()
+      if: env.UPLOAD_IPK == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
@@ -132,7 +132,7 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: env.UPLOAD_FIRMWARE == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/bin/targets/*/*
         rm -rf packages
@@ -148,7 +148,7 @@ jobs:
 
     - name: Generate release tag
       id: tag1
-      if: env.UPLOAD_RELEASE == 'true' && steps.tag1.outputs.status == 'success' && !cancelled()
+      if: env.UPLOAD_RELEASE == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
