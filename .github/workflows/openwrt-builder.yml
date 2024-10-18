@@ -26,7 +26,7 @@ env:
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
-  UPLOAD_IPK: false
+  UPLOAD_IPK: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -128,7 +128,7 @@ jobs:
         name: ipk ${{ steps.tag.outputs.release_tag }}
         tag_name: ipk-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: openwrt/bin/packages/mipsel_24kc/luci/*
+        files: openwrt/bin/packages/mipsel_24kc/*
 
     - name: Organize files
       id: organize
