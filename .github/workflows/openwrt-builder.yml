@@ -114,7 +114,8 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
       run: |
         sudo apt install zip
-        zip packages.zip openwrt/bin/packages/mipsel_24kc/
+        cd openwrt/bin/packages
+        zip packages.zip mipsel_24kc
 
     - name: Generate ipk tag
       id: tag
