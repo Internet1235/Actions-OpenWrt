@@ -115,7 +115,7 @@ jobs:
       run: |
         sudo apt install zip
         cd openwrt/bin/packages/mipsel_24kc
-        zip packages.zip *
+        zip -r packages.zip *
 
     - name: Generate ipk tag
       id: tag
