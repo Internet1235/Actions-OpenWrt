@@ -135,7 +135,7 @@ jobs:
         name: ipk ${{ steps.tag.outputs.release_tag }}
         tag_name: ipk-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: openwrt/bin/packages/packages.zip
+        files: openwrt/bin/packages/mipsel_24kc/packages.zip
 
     - name: Organize files
       id: organize
