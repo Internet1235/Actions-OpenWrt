@@ -113,7 +113,6 @@ jobs:
     - name: 创建packages.zip
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
       run: |
-        sudo apt install zip
         cd openwrt/bin/packages/mipsel_24kc
         zip -r packages.zip *
 
