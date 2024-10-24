@@ -6,7 +6,7 @@
 rm -rf feeds/luci/themes/luci-theme-argon
 #git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/downloads/luci-theme-argon
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
-git clone https://github.com/jerrykuku/luci-theme-argon.git package#
+git clone https://github.com/jerrykuku/luci-theme-argon.git package
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci-light/Makefile
 git clone https://github.com/Internet1235/openwrt-iptvhelper.git package/iptvhelper
 git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
