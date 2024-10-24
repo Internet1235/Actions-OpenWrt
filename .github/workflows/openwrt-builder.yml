@@ -27,7 +27,6 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   UPLOAD_IPK: true
-  CACHE: false
   TZ: Asia/Shanghai
 
 jobs:
@@ -61,7 +60,6 @@ jobs:
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
-      if: env.CACHE == 'true'
       with:
         ccache: 'true'
         prefix: ${{ github.workspace }}/openwrt
