@@ -117,14 +117,16 @@ jobs:
         path: openwrt/bin
 
     - name: 创建packages.zip
+      id: zip
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
       run: |
         cd openwrt/bin/packages/mipsel_24kc
         zip -r packages.zip *
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Generate ipk tag
       id: tag
-      if: env.UPLOAD_IPK == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
+      if: steps.zip.outputs.status == 'success' && !cancelled()
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
