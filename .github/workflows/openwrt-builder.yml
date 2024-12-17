@@ -10,15 +10,21 @@
 # See /LICENSE for more information.
 #
 
-name: OpenWrt Builder
+name: Test Build
 
 on:
   repository_dispatch:
   workflow_dispatch:
+    inputs:
+      RELEASE:
+        description: 'RELEASE Version'
+        required: true
+        default: '2024.12.15-0006'
+      BRANCH:
+        description: 'feeds branch'
+        required: true
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -55,41 +61,43 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        wget https://github.com/Internet1235/Actions-OpenWrt/releases/download/${{ github.event.inputs.RELEASE }}/openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+        tar -xvJf openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+        mv openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64 openwrt-sdk
+        ln -sf /workdir/openwrt-sdk $GITHUB_WORKSPACE/openwrt-sdk
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt
+        prefix: ${{ github.workspace }}/openwrt-sdk
 
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
-        cd openwrt
+        cd openwrt-sdk
+        sed -i 's/coolsnowwolf\/packages/Internet1235\/packages;${{ github.event.inputs.BRANCH }}/g' feeds.conf.default
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+      run: cd openwrt-sdk && ./scripts/feeds update -a
 
     - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
+      run: cd openwrt-sdk && ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        [ -e files ] && mv files openwrt-sdk/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt-sdk/.config
         chmod +x $DIY_P2_SH
-        cd openwrt
+        cd openwrt-sdk
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: Download package
       id: package
       run: |
-        cd openwrt
-        make defconfig
+        cd openwrt-sdk
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
@@ -97,7 +105,7 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt
+        cd openwrt-sdk
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
@@ -178,5 +186,3 @@ jobs:
         tag_name: ${{ steps.tag1.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
-
-
