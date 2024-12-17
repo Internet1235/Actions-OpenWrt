@@ -5,7 +5,7 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #
 #sed -i '/#src-git luci https:\/\/github.com\/coolsnowwolf\/luci$/s/^#//' feeds.conf.default && sed -i '/src-git luci https:\/\/github.com\/coolsnowwolf\/luci.git;openwrt-23.05$/s/^/#/' feeds.conf.default
-sed -i 's/coolsnowwolf\/packages/Internet1235\/packages;alist/g' feeds.conf.default
+#sed -i 's/coolsnowwolf\/packages/Internet1235\/packages;alist/g' feeds.conf.default
 # Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
 #
 # This is free software, licensed under the MIT License.
@@ -16,5 +16,5 @@ sed -i 's/coolsnowwolf\/packages/Internet1235\/packages;alist/g' feeds.conf.defa
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
-echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
