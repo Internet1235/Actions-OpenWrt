@@ -31,7 +31,7 @@ env:
   DIY_P2_SH: diy-part2.sh
   CCACHE: false
   UPLOAD_BIN_DIR: true
-  UPLOAD_FIRMWARE: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: false
   UPLOAD_IPK: false
   TZ: Asia/Shanghai
