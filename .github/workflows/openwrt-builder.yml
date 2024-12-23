@@ -30,6 +30,7 @@ env:
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   CCACHE: false
+  DOWNLOAD_PACKAGE: false
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: false
@@ -97,6 +98,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: Download package
+      if: env.DOWNLOAD_PACKAGE == 'true'
       id: package
       run: |
         cd openwrt-sdk
@@ -109,9 +111,8 @@ jobs:
       id: compile
       run: |
         cd openwrt-sdk
-        PATH=$(pwd)/staging_dir/host/bin:$(pwd)/bin:$PATH
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 || make -j1 V=s
+        make package/feeds/packages/net/${{ github.event.inputs.PACKAGE_NAME }}/compile -j$(nproc) || make package/feeds/packages/net/${{ github.event.inputs.PACKAGE_NAME }}/compile -j1 || make package/feeds/packages/net/${{ github.event.inputs.PACKAGE_NAME }}/compile -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
