@@ -67,7 +67,7 @@ jobs:
       run: |
         df -hT $PWD
         wget -q https://github.com/Internet1235/Actions-OpenWrt/releases/download/${{ github.event.inputs.RELEASE }}/openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-        tar -xvf openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+        tar -xJf openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
         mv openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64 openwrt-sdk
         ln -sf /workdir/openwrt-sdk $GITHUB_WORKSPACE/openwrt-sdk
 
@@ -90,7 +90,7 @@ jobs:
       run: cd openwrt-sdk && ./scripts/feeds update -a
 
     - name: Install feeds
-      run: cd openwrt-sdk && ./scripts/feeds install alist
+      run: cd openwrt-sdk && ./scripts/feeds install ${{ github.event.inputs.PACKAGE_NAME }}
 
     - name: Load custom configuration
       run: |
@@ -114,7 +114,7 @@ jobs:
       run: |
         cd openwrt-sdk
         echo -e "$(nproc) thread compile"
-        make package/${{ github.event.inputs.PACKAGE_NAME }}/check -j$(nproc) && make package/${{ github.event.inputs.PACKAGE_NAME }}/compile -j$(nproc) V=s
+        make package/${{ github.event.inputs.PACKAGE_NAME }}/check -j$(nproc) V=s && make package/${{ github.event.inputs.PACKAGE_NAME }}/compile -j$(nproc) V=s
         echo "status=success" >> $GITHUB_OUTPUT
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
