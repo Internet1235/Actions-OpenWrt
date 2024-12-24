@@ -90,12 +90,11 @@ jobs:
       run: cd openwrt-sdk && ./scripts/feeds update -a
 
     - name: Install feeds
-      run: cd openwrt-sdk && ./scripts/feeds install -a
+      run: cd openwrt-sdk && ./scripts/feeds install alist
 
     - name: Load custom configuration
       run: |
         [ -e files ] && mv files openwrt-sdk/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt-sdk/.config
         chmod +x $DIY_P2_SH
         cd openwrt-sdk
         $GITHUB_WORKSPACE/$DIY_P2_SH
