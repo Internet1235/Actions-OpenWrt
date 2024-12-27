@@ -80,7 +80,7 @@ jobs:
       run: |
         df -hT $PWD
         wget -q https://github.com/Internet1235/compile/releases/download/${{ github.event.inputs.RELEASE }}/${{ matrix.arch }}
-        tar -xJf ${{ matrix.arch }}
+        tar -xf ${{ matrix.arch }}
         mv ${{ matrix.arch }} openwrt-sdk
         ln -sf /workdir/openwrt-sdk $GITHUB_WORKSPACE/openwrt-sdk
 
