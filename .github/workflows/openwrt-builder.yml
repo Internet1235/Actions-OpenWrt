@@ -19,7 +19,7 @@ on:
       RELEASE:
         description: 'RELEASE Version'
         required: true
-        default: '2024.12.18-2011'
+        default: '2024.12.27-0033'
       BRANCH:
         description: 'feeds branch'
         required: true
@@ -43,6 +43,19 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - openwrt-sdk-apm821xx-nand_gcc-13.3.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-ath79-generic_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-mpc85xx-p1010_gcc-13.3.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-mvebu-cortexa9_gcc-13.3.0_musl_eabi.Linux-x86_64.tar.xz
+          - openwrt-sdk-rockchip-armv8_gcc-13.3.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-sifiveu-generic_gcc-13.3.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-x86-geode_gcc-13.3.0_musl.Linux-x86_64.tar.xz
+          - openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.xz
 
     steps:
     - name: Checkout
@@ -66,9 +79,9 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        wget -q https://github.com/Internet1235/Actions-OpenWrt/releases/download/${{ github.event.inputs.RELEASE }}/openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-        tar -xJf openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-        mv openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64 openwrt-sdk
+        wget -q https://github.com/Internet1235/compile/releases/download/${{ github.event.inputs.RELEASE }}/${{ matrix.arch }}
+        tar -xJf ${{ matrix.arch }}
+        mv ${{ matrix.arch }} openwrt-sdk
         ln -sf /workdir/openwrt-sdk $GITHUB_WORKSPACE/openwrt-sdk
 
     - name: Cache
