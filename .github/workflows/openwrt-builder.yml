@@ -42,20 +42,47 @@ env:
 
 jobs:
   build:
+    name: Test ${{ matrix.arch }}
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        arch:
-          - openwrt-sdk-apm821xx-nand_gcc-13.3.0_musl.Linux-x86_64
-          - openwrt-sdk-ath79-generic_gcc-8.4.0_musl.Linux-x86_64
-          - openwrt-sdk-mpc85xx-p1010_gcc-13.3.0_musl.Linux-x86_64
-          - openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64
-          - openwrt-sdk-mvebu-cortexa9_gcc-13.3.0_musl_eabi.Linux-x86_64
-          - openwrt-sdk-rockchip-armv8_gcc-13.3.0_musl.Linux-x86_64
-          - openwrt-sdk-sifiveu-generic_gcc-13.3.0_musl.Linux-x86_64
-          - openwrt-sdk-x86-geode_gcc-13.3.0_musl.Linux-x86_64
-          - openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
+          include:
+          - arch: rockchip
+            target: openwrt-sdk-rockchip-armv8_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: true
+
+          - arch: arm_cortex-a9_vfpv3-d16
+            target: openwrt-sdk-mvebu-cortexa9_gcc-13.3.0_musl_eabi.Linux-x86_64
+            runtime_test: false
+
+          - arch: i386_pentium-mmx
+            target: openwrt-sdk-x86-geode_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: true
+
+          - arch: mips_24kc
+            target: openwrt-sdk-ath79-generic_gcc-8.4.0_musl.Linux-x86_64
+            runtime_test: true
+
+          - arch: mipsel_24kc
+            target: openwrt-sdk-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64
+            runtime_test: false
+
+          - arch: powerpc_464fp
+            target: openwrt-sdk-apm821xx-nand_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: false
+
+          - arch: powerpc_8548
+            target: openwrt-sdk-mpc85xx-p1010_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: false
+
+          - arch: riscv64_riscv64
+            target: openwrt-sdk-sifiveu-generic_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: false
+
+          - arch: x86_64
+            target: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
+            runtime_test: true
 
     steps:
     - name: Checkout
@@ -79,9 +106,9 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        wget -q https://github.com/Internet1235/compile/releases/download/${{ github.event.inputs.RELEASE }}/${{ matrix.arch }}.tar.xz
-        tar -xf ${{ matrix.arch }}.tar.xz
-        mv ${{ matrix.arch }} openwrt-sdk
+        wget -q https://github.com/Internet1235/compile/releases/download/${{ github.event.inputs.RELEASE }}/${{ matrix.target }}.tar.xz
+        tar -xf ${{ matrix.target }}.tar.xz
+        mv ${{ matrix.target }} openwrt-sdk
         ln -sf /workdir/openwrt-sdk $GITHUB_WORKSPACE/openwrt-sdk
 
     - name: Cache
