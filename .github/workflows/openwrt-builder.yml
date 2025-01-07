@@ -33,7 +33,6 @@ env:
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   CCACHE: false
-  DOWNLOAD_PACKAGE: true
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: false
@@ -141,7 +140,6 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: Download package
-      if: env.DOWNLOAD_PACKAGE == 'true'
       id: package
       run: |
         cd openwrt-sdk
