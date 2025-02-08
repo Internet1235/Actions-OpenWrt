@@ -116,33 +116,33 @@ jobs:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
 
-    - name: 创建packages.zip
+    - name: 创建ipk.zip
       id: zip
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
       run: |
         cd openwrt/bin/packages/mipsel_24kc
-        zip -r packages.zip *
+        zip -r ipk.zip *
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: Generate ipk tag
-      id: tag
-      if: steps.zip.outputs.status == 'success' && !cancelled()
-      run: |
-        echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
-        touch release.txt
-        [ ${UPLOAD_GOFILE} = true && ${{ steps.gofile.outputs.url }} ] && echo "🔗 [GoFile](${{ steps.gofile.outputs.url }})" >> release.txt
-        echo "status=success" >> $GITHUB_OUTPUT
+    #- name: Generate ipk tag
+    #  id: tag
+    #  if: steps.zip.outputs.status == 'success' && !cancelled()
+    #  run: |
+    #    echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
+    #    touch release.txt
+    #    [ ${UPLOAD_GOFILE} = true && ${{ steps.gofile.outputs.url }} ] && echo "🔗 [GoFile](${{ steps.gofile.outputs.url }})" >> release.txt
+    #    echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: Upload ipk to release
-      uses: softprops/action-gh-release@master
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        name: ipk ${{ steps.tag.outputs.release_tag }}
-        tag_name: ipk-${{ steps.tag.outputs.release_tag }}
-        body_path: release.txt
-        files: openwrt/bin/packages/mipsel_24kc/packages.zip
+    #- name: Upload ipk to release
+    #  uses: softprops/action-gh-release@master
+    #  if: steps.tag.outputs.status == 'success' && !cancelled()
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #  with:
+    #    name: ipk ${{ steps.tag.outputs.release_tag }}
+    #    tag_name: ipk-${{ steps.tag.outputs.release_tag }}
+    #    body_path: release.txt
+    #    files: openwrt/bin/packages/mipsel_24kc/packages.zip
 
     - name: Organize files
       id: organize
@@ -177,6 +177,8 @@ jobs:
       with:
         tag_name: ${{ steps.tag1.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
+        files: |
+           ${{ env.FIRMWARE }}/*
+           openwrt/bin/packages/mipsel_24kc/ipk.zip
 
 
