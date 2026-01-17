@@ -34,6 +34,33 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        # this might remove tools that are actually needed,
+        # if set to "true" but frees about 6 GB
+        tool-cache: true
+        
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+
+    - name: Freeing up disk space
+      uses: easimon/maximize-build-space@master
+      with: 
+        root-reserve-mb: 5120
+        swap-size-mb: 1
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+
     - name: Checkout
       uses: actions/checkout@main
 
@@ -48,11 +75,8 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
-      working-directory: /workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
@@ -120,7 +144,7 @@ jobs:
       id: zip
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
       run: |
-        cd openwrt/bin/packages/mipsel_24kc
+        cd openwrt/bin/packages/*
         zip -r ipk.zip *
         echo "status=success" >> $GITHUB_OUTPUT
 
@@ -179,7 +203,7 @@ jobs:
         body_path: release.txt
         files: |
            ${{ env.FIRMWARE }}/*
-           openwrt/bin/packages/mipsel_24kc/ipk.zip
+           openwrt/bin/packages/*/ipk.zip
 
     #- name: Delete workflow runs
     #  uses: Mattraks/delete-workflow-runs@main
