@@ -7,7 +7,7 @@
 #git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/downloads/luci-theme-argon
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
 #git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
-sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci-light/Makefile
+sed -i 's/luci-theme-bootstrap/luci-theme-design/' feeds/luci/collections/luci-light/Makefile
 #git clone https://github.com/Internet1235/openwrt-iptvhelper.git package/iptvhelper
 #git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
 #git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
@@ -33,7 +33,7 @@ exit 0" > package/base-files/files/etc/rc.local
 #
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.31.1/g' package/base-files/luci/bin/config_generate
+sed -i 's/192.168.1.1/192.168.31.1/g' package/base-files/files/bin/config_generate
 
 # Modify default theme
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
